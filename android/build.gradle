@@ -3,9 +3,10 @@ buildscript {
         google()
         mavenCentral()
     }
-    dependencies {
-        classpath 'com.google.gms:google-services:4.4.2'  // Firebase plugin
-    }
+   dependencies {
+    classpath 'com.android.tools.build:gradle:8.3.0'
+    classpath 'com.google.gms:google-services:4.4.2'  // Firebase plugin
+}
 }
 
 rootProject.buildDir = "../build"

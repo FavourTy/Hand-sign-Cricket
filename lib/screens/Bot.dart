@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print
+
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -292,7 +294,7 @@ class AiBot {
     }
 
     // If user has a pattern, break it
-    if (userPattern.hasRepeatingPattern && userChoice != null) {
+    if (userPattern.hasRepeatingPattern) {
       List<int> avoidChoices = [userChoice];
       if (userPattern.mostFrequent != null) {
         avoidChoices.add(userPattern.mostFrequent!);

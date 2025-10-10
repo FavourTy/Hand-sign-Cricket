@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hand_sign_cricket/screens/toss_screen.dart';
@@ -70,7 +72,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
       decoration: BoxDecoration(
         color: AppColors.boxYellow,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: AppColors.shadowBlack, blurRadius: 5)],
+        boxShadow:const [ BoxShadow(color: AppColors.shadowBlack, blurRadius: 5)],
       ),
       child: Text(
         widget.isMultiplayer ? "Multiplayer Setup" : "Single Player Setup",
@@ -90,7 +92,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
         labelText: "Team Name",
         labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         filled: true,
-        fillColor: AppColors.boxYellow.withOpacity(0.2),
+        fillColor: AppColors.boxYellow.withValues(alpha: 0.2),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.boxYellow),
@@ -124,7 +126,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                 labelStyle:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 filled: true,
-                fillColor: AppColors.boxYellow.withOpacity(0.2),
+                fillColor: AppColors.boxYellow.withValues(alpha :0.2),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: AppColors.boxYellow),
@@ -161,7 +163,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                 labelStyle:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 filled: true,
-                fillColor: AppColors.boxYellow.withOpacity(0.2),
+                fillColor: AppColors.boxYellow.withValues(alpha :0.2),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: AppColors.boxYellow),
@@ -192,12 +194,12 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
           decoration: BoxDecoration(
-            color: AppColors.boxYellow.withOpacity(0.2),
+            color: AppColors.boxYellow.withValues(alpha :0.2),
             borderRadius: BorderRadius.circular(12),
-            boxShadow: [const BoxShadow(color: AppColors.shadowBlack, blurRadius: 5)],
+            boxShadow: const[ BoxShadow(color: AppColors.shadowBlack, blurRadius: 5)],
           ),
           child: DropdownButtonFormField<int>(
-            value: value,
+            initialValue: value,
             dropdownColor: AppColors.boxYellow,
             decoration: const InputDecoration.collapsed(hintText: ''),
             items: List.generate(max - min + 1, (index) => min + index)
@@ -232,6 +234,10 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         shadowColor: AppColors.shadowBlack,
       ),
+      child: const Text(
+        "Start Game",
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
     );
   }
 
@@ -244,6 +250,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
 
     // Navigate to TossScreen with isMultiplayer = false
     Navigator.push(
+      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(
         builder: (context) => TossScreen(),

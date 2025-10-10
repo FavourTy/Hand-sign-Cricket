@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hand_sign_cricket/Transitions/pageTransitions.dart';
 import 'package:hand_sign_cricket/screens/settings_dialog_screen.dart';
 import 'package:hand_sign_cricket/screens/toss_screen.dart';
 import 'package:hand_sign_cricket/screens/Bot.dart';
@@ -11,11 +14,15 @@ import '../widgets/howtoplay.dart';
 import '../widgets/rating_dialog.dart';
 
 class MenuScreen extends StatefulWidget {
+  const MenuScreen({super.key});
+
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
 
 class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
+  // ScreenTransition _screenTransition = ScreenTransition();
+
   late AnimationController _titleController,
       _menuController,
       _floatingController;
@@ -150,8 +157,8 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
               children: [
                 Text(
                   "HAND CRICKET",
-                  style: GoogleFonts.creepster(
-                    fontSize: 100,
+                  style: GoogleFonts.pressStart2p(
+                    fontSize: 50,
                     fontWeight: FontWeight.w900,
                     color: Colors.orangeAccent,
                     shadows: [
@@ -166,7 +173,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                       const Shadow(
                           blurRadius: 13.0,
                           color: Colors.deepOrange,
-                          offset: Offset(-3, -3)),
+                          offset: Offset(-2, -3)),
                     ],
                   ),
                   textAlign: TextAlign.center,
@@ -187,10 +194,11 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
             opacity: _menuOpacity,
             child: Column(
               children: [
-                GestureDetector(
-                  onLongPress: () {
-                    // Debug feature: Long press to reset AI learning data
-                    _showResetAiDialog();
+                AnimatedScaleButton(
+                  text: "ꜱɪɴɢʟᴇ ᴘʟᴀʏᴇʀ",
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(ScreenTransition.createRoute(TossScreen()));
                   },
                   child: AnimatedScaleButton(
                     text: "Single Player",
@@ -206,7 +214,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                   ),
                 ),
                 AnimatedScaleButton(
-                  text: "Multiplayer",
+                  text: "ᴍᴜʟᴛɪᴘʟᴀʏᴇʀ",
                   onTap: () {
                     audioProvider.playSoundEffect('button_click.mp3');
                     showDialog(
@@ -250,7 +258,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                   scaleAnimation: _buttonScale,
                 ),
                 AnimatedScaleButton(
-                  text: "How to Play",
+                  text: "ʜᴏᴡ ᴛᴏ ᴘʟᴀʏ",
                   onTap: () {
                     audioProvider.playSoundEffect('button_click.mp3');
                     play.showHowToPlayDialog(context);
@@ -367,6 +375,7 @@ class AnimatedScaleButton extends StatelessWidget {
   final Animation<double> scaleAnimation;
 
   const AnimatedScaleButton({
+    super.key,
     required this.text,
     required this.onTap,
     required this.icon,
