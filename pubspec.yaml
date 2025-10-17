@@ -18,8 +18,8 @@ dependencies:
   shared_preferences:
   firebase_database:
   flutter_svg:
-  audioplayers: ^6.5.1
-  provider: ^6.1.5+1
+  audioplayers:
+  provider:
 
 
 dev_dependencies:
@@ -32,7 +32,7 @@ flutter:
 
   assets:
     - assets/animation/
-    # - assets/sounds/
+    - assets/sounds/
     - assets/gestures/
     - assets/icons/
 

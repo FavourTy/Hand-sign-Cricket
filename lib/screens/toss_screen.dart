@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hand_sign_cricket/Transitions/pageTransitions.dart';
 import 'package:hand_sign_cricket/screens/Bot.dart';
+import 'package:hand_sign_cricket/screens/game_screen.dart';
 import 'package:hand_sign_cricket/themes/app_colors.dart';
 import 'package:hand_sign_cricket/themes/app_fonts.dart';
-
-import 'package:hand_sign_cricket/screens/Bot.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/audio_provider.dart';
-import 'game_screen.dart';
 
 class TossScreen extends StatefulWidget {
   @override
@@ -103,11 +102,9 @@ class _TossScreenState extends State<TossScreen> {
   Widget build(BuildContext context) {
     final audioProvider = Provider.of<AudioProvider>(context, listen: false);
     return Scaffold(
-      backgroundColor: AppColors.backgroundBlue,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+        backgroundColor: AppColors.backgroundBlue,
+        body: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             if (isTossing || tossDone) Image.asset(animationAsset, height: 180),
             if (tossDone) ...[
               Text(
@@ -157,147 +154,32 @@ class _TossScreenState extends State<TossScreen> {
               ],
             ],
             if (!isTossing && !tossDone) ...[
-              // Difficulty Selection
+              // Show difficulty once
               _buildDifficultySelection(),
               const SizedBox(height: 30),
-
-              const Text("Choose Odd or Even",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: ["Odd", "Even"].map((e) {
-                  return GestureDetector(
-                    onTap: () {
-                      audioProvider.playSoundEffect('button_click.mp3');
-                      setState(() => userChoice = e);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 15),
-                      decoration: BoxDecoration(
-                        color: userChoice == e
-                            ? Colors.white
-                            : AppColors.boxYellow,
-                        borderRadius: BorderRadius.circular(25),
-                        border: Border.all(color: Colors.black, width: 3),
-                      ),
-                      child: Text(e,
-                          style: AppFonts.bebasNeue(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
-                    ),
-                  );
-                }).toList(),
+              // Use a single AnimatedSwitcher to toggle between Odd/Even and Number chooser
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.2, 0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  ),
+                ),
+                child: userChoice == null
+                    ? _buildOddEvenChooser()
+                    : _buildNumberChooser(),
               ),
-              if (userChoice != null) ...[
-                const SizedBox(height: 20),
-                const Text("Select a number (1-6)",
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
-                GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        audioProvider.playSoundEffect('button_click.mp3');
-                        setState(() => userNumber = index + 1);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: userNumber == index + 1
-                              ? Border.all(color: Colors.yellowAccent, width: 5)
-                              : Border.all(color: Colors.black, width: 5),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset('assets/gestures/${index + 1}.png',
-                              fit: BoxFit.cover),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                if (userWonToss) ...[
-                  const Text("Choose Bat or Bowl",
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black)),
-                  const SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: ["🏏Bat", "🥎Bowl"]
-                        .map((e) => ElevatedButton(
-                              onPressed: () => navigateToGame(e),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.yellow,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 15),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                                elevation: 10,
-                              ),
-                              child: Text(e,
-                                  style: AppFonts.bebasNeue(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black)),
-                            ))
-                        .toList(),
-                  ),
-                ] else ...[
-                  Text("Bot chose to $botDecision",
-                      style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black)),
-                ],
-              ],
-              if (!isTossing && !tossDone) ...[
-                // This combines the new difficulty feature with your animated switcher
-                _buildDifficultySelection(),
-                const SizedBox(height: 30),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 500),
-                  transitionBuilder: (child, animation) => FadeTransition(
-                    opacity: animation,
-                    child: SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(0.2, 0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    ),
-                  ),
-                  child: userChoice == null
-                      ? _buildOddEvenChooser()
-                      : _buildNumberChooser(),
-                ),
-              ],
             ],
-          ),
-        ),
-      ),
-    );
+          ]),
+        ));
   }
 
   Widget _buildOddEvenChooser() {
-  Widget _buildDifficultySelection() {
     final audioProvider = Provider.of<AudioProvider>(context, listen: false);
     return Column(
       key: const ValueKey('chooseOddEven'),
@@ -330,25 +212,6 @@ class _TossScreenState extends State<TossScreen> {
               ),
             );
           }).toList(),
-        const Text(
-          'Select Bot Difficulty',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 15),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildDifficultyButton(
-                "Easy", Difficulty.easy, Colors.green, audioProvider),
-            _buildDifficultyButton(
-                "Medium", Difficulty.medium, Colors.orange, audioProvider),
-            _buildDifficultyButton(
-                "Hard", Difficulty.hard, Colors.red, audioProvider),
-          ],
         ),
       ],
     );
@@ -418,6 +281,7 @@ class _TossScreenState extends State<TossScreen> {
   }
 
   Widget _buildDifficultySelection() {
+    final audioProvider = Provider.of<AudioProvider>(context, listen: false);
     return Center(
       child: Column(
         children: [
@@ -459,10 +323,12 @@ class _TossScreenState extends State<TossScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildDifficultyButton("Easy", Difficulty.easy, Colors.green),
               _buildDifficultyButton(
-                  "Medium", Difficulty.medium, Colors.orange),
-              _buildDifficultyButton("Hard", Difficulty.hard, Colors.red),
+                  "Easy", Difficulty.easy, Colors.green, audioProvider),
+              _buildDifficultyButton(
+                  "Medium", Difficulty.medium, Colors.orange, audioProvider),
+              _buildDifficultyButton(
+                  "Hard", Difficulty.hard, Colors.red, audioProvider),
             ],
           ),
           const SizedBox(height: 10),
@@ -472,8 +338,8 @@ class _TossScreenState extends State<TossScreen> {
     );
   }
 
-  Widget _buildDifficultyButton(
-      String label, Difficulty difficulty, Color color) {
+  Widget _buildDifficultyButton(String label, Difficulty difficulty,
+      Color color, AudioProvider audioProvider) {
     bool isSelected = selectedDifficulty == difficulty;
     return GestureDetector(
       onTap: () {

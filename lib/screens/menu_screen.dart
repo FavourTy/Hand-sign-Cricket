@@ -200,18 +200,8 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                     Navigator.of(context)
                         .push(ScreenTransition.createRoute(TossScreen()));
                   },
-                  child: AnimatedScaleButton(
-                    text: "Single Player",
-                    onTap: () {
-                      audioProvider.playSoundEffect('button_click.mp3');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TossScreen()));
-                    },
-                    icon: Icons.person,
-                    scaleAnimation: _buttonScale,
-                  ),
+                  icon: Icons.person,
+                  scaleAnimation: _buttonScale,
                 ),
                 AnimatedScaleButton(
                   text: "ᴍᴜʟᴛɪᴘʟᴀʏᴇʀ",
@@ -309,7 +299,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
               //     const SizedBox(width: 50),
               //     GestureDetector(
               //       onTap: () {
-              //         audioProvider.playSoundEffect('button_click.wav');
+              //         audioProvider.playSoundEffect('button_click.mp3');
               //         showDialog(
               //             context: context,
               //             builder: (_) => const SettingsDialog());
@@ -328,7 +318,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      audioProvider.playSoundEffect('button_click.wav');
+                    audioProvider.playSoundEffect('button_click.mp3');
                       const url =
                           "https://github.com/aavvvacado/Hand-sign-Cricket";
                       launchUrl(Uri.parse(url),
@@ -342,7 +332,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                   ),
                   GestureDetector(
                     onTap: () {
-                      audioProvider.playSoundEffect('button_click.wav');
+                      audioProvider.playSoundEffect('button_click.mp3');
                       showDialog(
                           context: context, builder: (_) => RatingDialog());
                     },
@@ -351,7 +341,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                   ),
                   GestureDetector(
                     onTap: () {
-                      audioProvider.playSoundEffect('button_click.wav');
+                      audioProvider.playSoundEffect('button_click.mp3');
                       showDialog(
                           context: context,
                           builder: (_) => const SettingsDialog());

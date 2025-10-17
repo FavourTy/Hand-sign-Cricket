@@ -71,7 +71,7 @@ class SettingsDialog extends StatelessWidget {
             Center(
               child: TextButton(
                 onPressed: () {
-                  audioProvider.playSoundEffect('button_click.wav');
+                  audioProvider.playSoundEffect('button_click.mp3');
                   Navigator.of(context).pop();
                 },
                 child: const Text(

@@ -234,10 +234,6 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         shadowColor: AppColors.shadowBlack,
       ),
-      child: const Text(
-        "Start Game",
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
     );
   }
 
